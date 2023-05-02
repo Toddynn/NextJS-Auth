@@ -1,9 +1,12 @@
 import {useState} from 'react';
 import { authService } from '../src/services/auth/authService';
+import { useRouter } from 'next/router';
 
-export default function HomeScreen() {
+export default function Login() {
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
+
+  const router = useRouter();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -13,8 +16,7 @@ export default function HomeScreen() {
       password: password
     })
     .then(()=>{
-      alert('Login realizado com sucesso');
-      window.location.replace('/AuthPageSSR');
+      router.push('/AuthPageStatic');
     })
     .catch((err)=>{
       alert(err.message);

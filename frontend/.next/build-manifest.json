@@ -15,10 +15,10 @@
     "static/development/_middlewareManifest.js"
   ],
   "pages": {
-    "/AuthPageSSR": [
+    "/": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/AuthPageSSR.js"
+      "static/chunks/pages/index.js"
     ],
     "/AuthPageStatic": [
       "static/chunks/webpack.js",

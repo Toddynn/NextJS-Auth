@@ -1,7 +1,9 @@
-export default function AuthPageStatic(props){
+import { withSessionHOC } from "../src/services/auth/session";
+
+function AuthPageStatic(props){
     return(
         <>
-            <h1>AuthPageSSR</h1>
+            <h1>AuthPageStatic</h1>
             <pre>
                 {
                     JSON.stringify(props, null, 2)
@@ -10,3 +12,5 @@ export default function AuthPageStatic(props){
         </>
     )
 }
+
+export default withSessionHOC(AuthPageStatic);
