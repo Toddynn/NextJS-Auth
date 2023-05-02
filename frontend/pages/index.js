@@ -16,7 +16,7 @@ export default function Login() {
       password: password
     })
     .then(()=>{
-      router.push('/AuthPageStatic');
+      router.push('/AuthPageSSR');
     })
     .catch((err)=>{
       alert(err.message);

@@ -17,7 +17,7 @@ export const tokenService = {
             path: '/'
         });
     },
-    get(ctx = null){
+    get(ctx=null){
         const cookies = nookies.get(ctx);
         return cookies[ACCESS_TOKEN_KEY] || '';
         //return globalThis?.localStorage?.getItem(ACCESS_TOKEN_KEY) || globalThis?.sessionStorage?.getItem(ACCESS_TOKEN_KEY)

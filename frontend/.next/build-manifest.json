@@ -20,10 +20,10 @@
       "static/chunks/main.js",
       "static/chunks/pages/index.js"
     ],
-    "/AuthPageStatic": [
+    "/AuthPageSSR": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/AuthPageStatic.js"
+      "static/chunks/pages/AuthPageSSR.js"
     ],
     "/_app": [
       "static/chunks/webpack.js",
