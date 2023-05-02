@@ -1,15 +1,29 @@
+import nookies from 'nookies';
 const ACCESS_TOKEN_KEY = 'ACCESS_TOKEN_KEY'
 
+
+const ONE_SECOND = 1;
+const ONE_MINUTE = ONE_SECOND * 60;
+const ONE_HOUR = ONE_MINUTE * 60;
+const ONE_DAY = ONE_HOUR * 24;
+const ONE_YEAR = ONE_DAY * 365;
+
 export const tokenService = {
-    save(access_token){
-        localStorage.setItem(ACCESS_TOKEN_KEY, access_token);
-        sessionStorage.setItem(ACCESS_TOKEN_KEY, access_token)
+    save(access_token, ctx = null){
+        globalThis?.localStorage?.setItem(ACCESS_TOKEN_KEY, access_token);
+        globalThis?.sessionStorage?.setItem(ACCESS_TOKEN_KEY, access_token);
+        nookies.set(ctx, ACCESS_TOKEN_KEY, access_token, {
+            maxAge: ONE_YEAR,
+            path: '/'
+        });
     },
-    get(){
-        return localStorage.getItem(ACCESS_TOKEN_KEY) || sessionStorage.getItem(ACCESS_TOKEN_KEY)
+    get(ctx = null){
+        const cookies = nookies.get(ctx);
+        return cookies[ACCESS_TOKEN_KEY] || '';
+        //return globalThis?.localStorage?.getItem(ACCESS_TOKEN_KEY) || globalThis?.sessionStorage?.getItem(ACCESS_TOKEN_KEY)
     },
     delete(){
-        localStorage.removeItem(ACCESS_TOKEN_KEY);
-        sessionStorage.removeItem(ACCESS_TOKEN_KEY)
+        globalThis?.localStorage?.removeItem(ACCESS_TOKEN_KEY);
+        globalThis?.sessionStorage?.removeItem(ACCESS_TOKEN_KEY);
     }
 }

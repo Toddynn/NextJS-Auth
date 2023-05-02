@@ -1,12 +1,12 @@
-export default function AuthPageStatic(){
+export default function AuthPageStatic(props){
     return(
         <>
-            <h1>AuthPageStatic</h1>
-            <div>
+            <h1>AuthPageSSR</h1>
+            <pre>
                 {
-                    JSON.stringify(null, 2)
+                    JSON.stringify(props, null, 2)
                 }
-            </div>
+            </pre>
         </>
     )
 }

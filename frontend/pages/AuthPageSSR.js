@@ -1,13 +1,23 @@
-export default function AuthPageSSR(){
+import { tokenService } from "../src/services/auth/tokenService"
+import nookies from 'nookies';
+
+export default function AuthPageSSR(props){
     return(
         <>
-            
             <h1>AuthPageSSR</h1>
-            <div>
+            <pre>
                 {
-                    JSON.stringify(null, 2)
+                    JSON.stringify(props, null, 2)
                 }
-            </div>
+            </pre>
         </>
     )
+}
+
+export async function getServerSideProps(ctx){
+    return {
+        props: {
+            token: tokenService.get(ctx),
+        }
+    }
 }

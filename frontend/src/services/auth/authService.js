@@ -1,23 +1,17 @@
-import { HttpClient } from "../../infra/HttpClient/HttpClient";
+import axios from "axios";
 import { tokenService } from "./tokenService";
 
 export const authService = {
     async login ({username, password}){
-        const body = {username, password}
-        return await fetch(`http://localhost:4000/api/login`, {
-            method: 'POST',
-            headers:{
-                'Content-Type': 'application/json'
-            },
-            body: `${body}`
-        })
-        .then((res) => {
-            console.log(res)
-           /*  if(!res.json){
-                throw new Error('Usuário ou senha inválidos')
-            }
-            console.log(res)
-            tokenService.save(res.body.access_token) */
-        })
+        const data = {username, password};
+        return axios.post(`http://localhost:4000/api/login`, data)
+            .then((res) => {
+                if(res.status === 200){
+                    const body = res.data
+                    tokenService.save(body.data.access_token)
+                } else {
+                    throw new Error('Usuário ou senha inválidos')
+                }
+            })
     }
 }

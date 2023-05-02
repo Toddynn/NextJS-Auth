@@ -14,10 +14,10 @@ export default function HomeScreen() {
     })
     .then(()=>{
       alert('Login realizado com sucesso');
+      window.location.replace('/AuthPageSSR');
     })
     .catch((err)=>{
-      console.log(err)
-      alert('usuario ou senha invalidos');
+      alert(err.message);
     })
   };
 
