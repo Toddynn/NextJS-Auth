@@ -3,6 +3,6 @@
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
   "/api/session": "pages/api/session.js",
-  "/api/refresh": "pages/api/refresh.js",
-  "/api/login": "pages/api/login.js"
+  "/api/login": "pages/api/login.js",
+  "/api/refresh": "pages/api/refresh.js"
 }

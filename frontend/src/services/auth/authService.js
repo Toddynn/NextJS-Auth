@@ -21,7 +21,7 @@ export const authService = {
             .then(async ({data})=>{
                 const refresh_token = data.refresh_token;
 
-                await axios.post(`/api/refresh`, {refresh_token})
+                await axios.post(`http://localhost:3000/api/refresh`, {refresh_token})
                 .then((res)=>{
                     console.log(res.data)
                 })

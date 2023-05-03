@@ -5,7 +5,7 @@ import { tokenService } from '../../src/services/auth/tokenService';
 const controllers = {
     async storeRefreshToken(req, res) {
         const ctx = { req, res }; 
-        nookies.set(ctx, "REFRESH_TOKEN", req.body.refresh_token, {
+        nookies.set(ctx, "REFRESH_TOKEN_KEY", req.body.refresh_token, {
             httpOnly: true,
             sameSite: 'lax',
         })
@@ -28,7 +28,7 @@ const controllers = {
     async regenerateTokens(req, res){
         const ctx = { req, res };
         const cookies = nookies.get(ctx);
-        const refreshToken = cookies["REFRESH_TOKEN"];
+        const refreshToken = cookies["REFRESH_TOKEN_KEY"];
 
         const baseURL ='http://localhost:4000'
         const refreshResponse = await fetch(`${baseURL}/api/refresh`, {
@@ -37,13 +37,10 @@ const controllers = {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${refreshToken}`
             },
-            body: refreshToken
         });
-asdasdasdasdasdasdasdasdasdsda
-        console.log(baseURL)
 
         if(refreshResponse.ok){
-            nookies.set(ctx, "REFRESH_TOKEN", refreshResponse.body.data.refresh_token, {
+            nookies.set(ctx, "REFRESH_TOKEN", refreshResponse.headers.data.refresh_token, {
                 httpOnly: true,
                 sameSite: 'lax',
             });
@@ -57,7 +54,7 @@ asdasdasdasdasdasdasdasdasdsda
         else{
             res.json({
                 status: 401,
-                message: 'Não autorizado'
+                message: 'Não autorizado',
             })
         }
     } 
