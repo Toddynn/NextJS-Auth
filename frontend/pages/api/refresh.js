@@ -1,13 +1,18 @@
-import axios from 'axios';
-import nookies from 'nookies'
+import nookies from 'nookies';
+import { HttpClient } from '../../src/infra/HttpClient/HttpClient';
 import { tokenService } from '../../src/services/auth/tokenService';
+
+const baseURL_BACK_END = 'http://localhost:4000';
+const baseURL_FRONT_END = 'http://localhost:3000';
+const REFRESH_TOKEN_KEY = 'REFRESH_TOKEN_KEY';
 
 const controllers = {
     async storeRefreshToken(req, res) {
         const ctx = { req, res }; 
-        nookies.set(ctx, "REFRESH_TOKEN_KEY", req.body.refresh_token, {
+        nookies.set(ctx, REFRESH_TOKEN_KEY, req.body.refresh_token, {
             httpOnly: true,
             sameSite: 'lax',
+            path: '/',
         })
 
         res.json({
@@ -16,7 +21,7 @@ const controllers = {
             }
         })
     },
-    async getCookies(req, res){
+    async displayCookies(req, res){
         const ctx = { req, res };
 
         res.json({
@@ -28,48 +33,65 @@ const controllers = {
     async regenerateTokens(req, res){
         const ctx = { req, res };
         const cookies = nookies.get(ctx);
-        const refreshToken = cookies["REFRESH_TOKEN_KEY"];
+        const refresh_token = cookies[REFRESH_TOKEN_KEY] || req.body.refresh_token;
 
-        const baseURL ='http://localhost:4000'
-        const refreshResponse = await fetch(`${baseURL}/api/refresh`, {
+        const refreshResponse = await HttpClient(`${baseURL_BACK_END}/api/refresh`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${refreshToken}`
-            },
-        });
+            body: { refresh_token }
+        })
 
-        if(refreshResponse.ok){
-            nookies.set(ctx, "REFRESH_TOKEN", refreshResponse.headers.data.refresh_token, {
-                httpOnly: true,
-                sameSite: 'lax',
-            });
-
-            tokenService.save(body.data.refresh_token, ctx);
         
-            res.json({
-                refreshResponse
-            })
-        }
-        else{
+        if(!refreshResponse.ok){
             res.json({
                 status: 401,
                 message: 'Não autorizado',
             })
+        }else{
+            const body = refreshResponse.body
+            nookies.set(ctx, REFRESH_TOKEN_KEY, body.data.refresh_token, {
+                httpOnly: true,
+                sameSite: 'lax',
+                path: '/',
+            });
+
+            tokenService.save(body.data.access_token, ctx);
+        
+            res.json({
+                status: 200,
+                message: 'Token regenerado com sucesso',
+                body: body.data
+            })
         }
-    } 
-}
+    }
+} 
 
 const controllerBy = {
     POST: controllers.storeRefreshToken,
-    GET: controllers.regenerateTokens
+    GET: controllers.regenerateTokens,
+    PUT: controllers.regenerateTokens,
+    DELETE: (req,res)=>{
+        const ctx = {req, res};
+        nookies.destroy(ctx, REFRESH_TOKEN_KEY, {
+            httpOnly: true,
+            sameSite: 'lax',
+            path: '/',
+        })
+
+        res.json({
+            data:{
+                status: 200,
+                message: 'Token deleted successfully'
+            }
+        })
+    }
 }
 
-export default function handler(req, res){
-    if(controllerBy[req.method]){
-        return controllerBy[req.method](req, res)
+export default function handler(request, response){
+    if(controllerBy[request.method]){
+        const requestMethod = request.method;
+        return controllerBy[requestMethod](request, response);
     }else{
-        res.status(404).json({
+        response.status(404).json({
             status: 404,
             message: 'Not found'
         })

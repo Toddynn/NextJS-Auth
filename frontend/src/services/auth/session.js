@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { authService } from "./authService";
-import { useState, useEffect } from "react";
+import { useState, useEffect, React } from "react";
 
 export function withSession(funcao){
     return async (ctx) => {
@@ -32,7 +32,8 @@ export function useSession(){
     const [error, setError] = useState(null);
 
     useEffect(()=>{
-        authService.getSession().then((userSession)=>{
+        authService.getSession()
+        .then((userSession)=>{
             setSession(userSession);
         })
         .catch((err)=>{
@@ -46,17 +47,16 @@ export function useSession(){
     return {
         loading,
         error,
-        data: {session}
+        data: {session},
     }
 }
 
 export function withSessionHOC(Component){
     return function Wrapper(props){
         const session = useSession();
-
         const router = useRouter();
         
-        if(session.error){
+        if(session.error && !session.loading){
             router.push('/?error=401');
         }
 

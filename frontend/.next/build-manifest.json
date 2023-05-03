@@ -25,6 +25,11 @@
       "static/chunks/main.js",
       "static/chunks/pages/AuthPageSSR.js"
     ],
+    "/AuthPageStatic": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/AuthPageStatic.js"
+    ],
     "/_app": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",

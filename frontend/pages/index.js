@@ -1,6 +1,7 @@
 import {useState} from 'react';
 import { authService } from '../src/services/auth/authService';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 export default function Login() {
   const [password, setPassword] = useState('');
@@ -35,6 +36,10 @@ export default function Login() {
           <button>
             Entrar
           </button>
+        </div>
+        <div className='flex flex-col gap-3'>
+            <Link href='/AuthPageSSR'>Page Server Side Render</Link>
+            <Link href='/AuthPageStatic'>Page Static</Link>
         </div>
       </form>
     </div>
